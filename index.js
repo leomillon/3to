@@ -1,8 +1,7 @@
 var express = require('express'),
 	cons = require('consolidate'),
+	debug = require('debug')('3to:dev');
 	app = express();
-
-var serverPort = 8080;
 
 app.engine('html', cons.mustache);
 
@@ -10,8 +9,11 @@ app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
 
 app.get('/', function(req, res) {
-	res.render('index', { testNum : 1 });
+	var dataValue = 1;
+	debug('Index page requested with data = ' + dataValue);
+	res.render('index', { data : dataValue });
 });
 
-app.listen(serverPort);
-console.log('Server listening on port ' + serverPort);
+var server = app.listen(8080, function() {
+	debug('Listening on port %d', server.address().port);
+});
