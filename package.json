@@ -1,0 +1,21 @@
+{
+    "name": "3to",
+    "version": "0.1.0",
+    "author": "Léo Millon <contact@leomillon.fr>",
+    "description": "A TicTacToe Online game",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/leomillon/3to.git"
+    },
+    "dependencies": {
+        "express": "~3.5.0",
+        "mustache": "~0.8.1"
+    },
+    "licence": "MIT",
+    "engines": {
+        "node": ">=0.10"
+    }
+}
