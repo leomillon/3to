@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "express": "~3.5.0",
+        "consolidate": "~0.10.0",
         "mustache": "~0.8.1"
     },
     "licence": "MIT",
