@@ -1,11 +1,10 @@
 {
     "name": "3to",
     "version": "0.1.0",
-    "author": "Léo Millon <contact@leomillon.fr>",
+    "author": "Léo Millon <millon.leo@gmail.com>",
     "description": "A TicTacToe Online game",
     "scripts": {
-        "start": "node index.js",
-        "debug": "DEBUG=3to:* node index.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
