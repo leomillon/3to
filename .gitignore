@@ -12,6 +12,7 @@ logs
 results
 
 .project
+.idea
 
 npm-debug.log
 node_modules
