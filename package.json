@@ -4,7 +4,7 @@
     "author": "Léo Millon <millon.leo@gmail.com>",
     "description": "A TicTacToe Online game",
     "scripts": {
-        "start": "node index.js"
+        "start": "node app.js"
     },
     "repository": {
         "type": "git",
@@ -12,9 +12,8 @@
     },
     "dependencies": {
         "express": "3.5.x",
-        "debug": "0.7.x",
-        "consolidate": "0.10.x",
-        "mustache": "0.8.x"
+        "jade": "*",
+        "socket.io": "0.9.x"
     },
     "licence": "MIT",
     "engines": {

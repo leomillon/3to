@@ -1,0 +1,20 @@
+extends layout
+
+block scripts
+    script(src='/socket.io/socket.io.js')
+    script(src='js/scripts.js')
+
+block content
+    .container
+        .jumbotron
+            h1 #{title}
+            p(class="lead") #{description}
+        .row
+            .col-lg-6
+                h2 Socket.io status
+                p(id="socket-status").
+                    Status: <span class="value"></span>
+            .col-lg-6
+                h2 Socket.io server message
+                p(id="socket-message").
+                    Message: <span class="value"></span>
