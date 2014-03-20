@@ -1,20 +1,13 @@
 extends layout
 
-block scripts
-    script(src='/socket.io/socket.io.js')
-    script(src='js/scripts.js')
-
 block content
     .container
-        .jumbotron
+        .jumbotron.header
             h1 #{title}
             p(class="lead") #{description}
         .row
-            .col-lg-6
-                h2 Socket.io status
-                p(id="socket-status").
-                    Status: <span class="value"></span>
-            .col-lg-6
-                h2 Socket.io server message
-                p(id="socket-message").
-                    Message: <span class="value"></span>
+            .col-lg-12
+                form(method="POST")
+                    input(type="text", id="gameId", name="gameId")
+                    button(type="submit", name="join_game") Join a game
+                    button(type="submit", name="create_game") Create a game

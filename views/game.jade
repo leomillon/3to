@@ -1,0 +1,41 @@
+extends layout
+
+block append scripts
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/game.js')
+
+block content
+    .container
+        .row
+            .col-xs-12
+                h1.title #{title} <small>#{description}</small>
+        .row
+            .col-xs-12
+                table#game-grid.table.table-bordered
+                    tbody
+                        tr
+                            td#A1
+                                .case X
+                            td#A2
+                                .case.selectable &nbsp;
+                            td#A3
+                                .case.selectable &nbsp;
+                        tr
+                            td#B1
+                                .case.selectable O
+                            td#B2
+                                .case.selectable O
+                            td#B3
+                                .case.selectable O
+                        tr
+                            td#C1
+                                .case.selectable S
+                            td#C2
+                                .case.selectable S
+                            td#C3
+                                .case.selectable S
+
+    #game-data
+        form
+            input#socket-url(type="hidden", value="#{socketUrl}")
+            input#game-id(type="hidden", value="#{gameId}")
