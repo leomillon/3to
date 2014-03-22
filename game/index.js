@@ -1,11 +1,8 @@
-var definer = require('../lib/node-constants/lib');
-
 function isUndefined(variable) {
     return typeof variable === 'undefined';
 }
 
-var Constants = {};
-definer.define(Constants, {
+var Constants = {
     State: {
         X: 'X',
         O: 'O',
@@ -14,7 +11,7 @@ definer.define(Constants, {
     MIN_PLAYER: 2,
     MAX_PLAYER: 2,
     MAX_GRID_SIZE: 3
-});
+}
 
 var games = [];
 
