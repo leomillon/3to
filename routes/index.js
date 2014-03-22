@@ -1,10 +1,14 @@
 var path = require('path');
 
+function isDefined(variable) {
+    return typeof variable !== 'undefined';
+}
+
 function joinGame(req, res, gameId) {
     res.render('game', {
         title: '3to',
         description: 'TicTacToe Online',
-        socketUrl: "http://localhost:3000",
+        socketUrl: "http://192.168.1.4:3000",
         gameId: gameId
     });
 }
@@ -27,10 +31,10 @@ exports.index = function(req, res) {
 exports.indexActions = function(req, res) {
     var body = req.body;
 
-    if (typeof body.join_game !== 'undefined') {
+    if (isDefined(body.join_game)) {
         res.redirect(path.join('/', 'game', body.gameId, 'join'));
     }
-    else if (typeof body.create_game !== 'undefined') {
+    else if (isDefined(body.create_game)) {
         res.redirect(path.join('/', 'game', body.gameId, 'create'));
     }
 };

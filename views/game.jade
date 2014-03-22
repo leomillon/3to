@@ -11,29 +11,36 @@ block content
                 h1.title #{title} <small>#{description}</small>
         .row
             .col-xs-12
+                #game-status
+        .row
+            .col-xs-12
                 table#game-grid.table.table-bordered
                     tbody
                         tr
-                            td#A1
-                                .case X
-                            td#A2
-                                .case.selectable &nbsp;
-                            td#A3
-                                .case.selectable &nbsp;
+                            td
+                                #grid_0_0.case(data-row="0", data-column="0")
+                            td
+                                #grid_0_1.case(data-row="0", data-column="1")
+                            td
+                                #grid_0_2.case(data-row="0", data-column="2")
                         tr
-                            td#B1
-                                .case.selectable O
-                            td#B2
-                                .case.selectable O
-                            td#B3
-                                .case.selectable O
+                            td
+                                #grid_1_0.case(data-row="1", data-column="0")
+                            td
+                                #grid_1_1.case(data-row="1", data-column="1")
+                            td
+                                #grid_1_2.case(data-row="1", data-column="2")
                         tr
-                            td#C1
-                                .case.selectable S
-                            td#C2
-                                .case.selectable S
-                            td#C3
-                                .case.selectable S
+                            td
+                                #grid_2_0.case(data-row="2", data-column="0")
+                            td
+                                #grid_2_1.case(data-row="2", data-column="1")
+                            td
+                                #grid_2_2.case(data-row="2", data-column="2")
+        .row
+            .col-xs-12
+                #validation
+                    button#validate-move-btn(type="button", class='btn btn-primary') Validate
 
     #game-data
         form

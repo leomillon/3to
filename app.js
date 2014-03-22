@@ -34,9 +34,18 @@ app.get('/', routes.index)
     .get('/game/:gameId/join', routes.joinGame)
     .get('/game/:gameId/create', routes.createGame)
     .use(function(req, res) {
-        res.status(404);
+        var errorCode = 404;
+        res.status(errorCode);
         res.render('error', {
-            errorCode: '404',
+            errorCode: errorCode,
+            errorMessage: 'Page not found'
+        });
+    })
+    .use(function(error, req, res, next) {
+        var errorCode = 500;
+        res.status(errorCode);
+        res.render('error', {
+            errorCode: errorCode,
             errorMessage: 'Page not found'
         });
     });
@@ -48,20 +57,29 @@ server.listen(app.get('port'), function() {
 io.sockets.on('connection', function(socket) {
 
     socket.on('join game', function(data) {
-        var gameId = data.game;
+        var gameId = data.gameId;
 
-        try {
-            var playerId = game.joinGame(gameId);
-            socket.set('gameId', gameId);
-            socket.set('playerId', playerId);
-            socket.join(gameId);
+        game.joinGame(gameId, function(err, playerId, gameData) {
+            if (err == null) {
+                socket.set('gameId', gameData.gameId);
+                socket.set('playerId', playerId);
+                socket.join(gameId);
 
-            socket.emit('game joined', { playerId: playerId });
-        }
-        catch (e) {
-            console.error('Unable to join game ', gameId, '. Reason : ', e);
-        }
+                socket.emit('game joined', err, playerId, gameData);
+                socket.broadcast.to(gameId).emit('game updated', err, gameData);
+            }
+            else {
+                console.error(err);
+            }
+        });
+    });
 
+    socket.on('player moved', function(data) {
+        socket.get('gameId', function(err, gameId) {
+            game.move(gameId, data, function (err, gameData) {
+                io.sockets.in(gameId).emit('game updated', err, gameData);
+            })
+        });
     });
 
 });
