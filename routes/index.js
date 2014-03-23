@@ -41,8 +41,8 @@ exports.indexActions = function(req, res) {
 
 exports.joinGame = function(req, res) {
     joinGame(req, res, req.params.gameId);
-}
+};
 
 exports.createGame = function(req, res) {
     createGame(req, res, req.params.gameId);
-}
+};

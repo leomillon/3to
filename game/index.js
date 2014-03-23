@@ -11,7 +11,7 @@ var Constants = {
     MIN_PLAYER: 2,
     MAX_PLAYER: 2,
     MAX_GRID_SIZE: 3
-}
+};
 
 var games = [];
 
@@ -39,78 +39,73 @@ function Game(id) {
         winnerState = Constants.State.BLANK;
         moveCount = 0;
         lastPlayerState = winnerState;
-    }
+    };
 
     var endGame = function (state) {
         gameOver = true;
         winnerState = state;
-    }
+    };
 
     var checkWinner = function (row, column, state) {
         lastPlayerState = state;
         // Check columns
         for (var i = 0; i < gridSize; i++) {
-            if (grid[row][i] != state) {
+            if (checkLine(row, i, i, gridSize, state)) {
                 break;
-            }
-            if (i == gridSize - 1) {
-                endGame(state);
-                return;
             }
         }
 
         // Check rows
-        for (var i = 0; i < gridSize; i++) {
-            if (grid[i][column] != state) {
+        for (var j = 0; j < gridSize; j++) {
+            if (checkLine(j, column, j, gridSize, state)) {
                 break;
-            }
-            if (i == gridSize - 1) {
-                endGame(state);
-                return;
             }
         }
 
         // Check diag
-        if (row == column) {
-            for (var i = 0; i < gridSize; i++) {
-                if (grid[i][i] != state) {
+        if (row === column) {
+            for (var k = 0; k < gridSize; k++) {
+                if (checkLine(k, k, k, gridSize, state)) {
                     break;
-                }
-                if (i == gridSize - 1) {
-                    endGame(state);
-                    return;
                 }
             }
         }
 
         // Check anti-diag
-        for (var i = 0; i < gridSize; i++) {
-            if (grid[i][(gridSize - 1) - i] != state) {
+        for (var l = 0; l < gridSize; l++) {
+            if (checkLine(l, (gridSize - 1) - l, l, gridSize, state)) {
                 break;
-            }
-            if (i == gridSize - 1) {
-                endGame(state);
-                return;
             }
         }
 
         // Check draw
-        if (moveCount == (Math.pow(gridSize,2) - 1)) {
+        if (moveCount === (Math.pow(gridSize,2) - 1)) {
             endGame(Constants.State.BLANK);
             return;
         }
-    }
+    };
+
+    var checkLine = function(row, column, index, size, state) {
+        if (grid[row][column] !== state) {
+            return true;
+        }
+        if (index === size - 1) {
+            endGame(state);
+            return true;
+        }
+        return false;
+    };
 
     var stateToPlay = function() {
-        if (lastPlayerState == Constants.State.BLANK || lastPlayerState == Constants.State.O) {
+        if (lastPlayerState === Constants.State.BLANK || lastPlayerState === Constants.State.O) {
             return Constants.State.X;
         }
         return Constants.State.O;
-    }
+    };
 
     var isReadyToStart = function() {
-        return players.length == Constants.MIN_PLAYER;
-    }
+        return players.length === Constants.MIN_PLAYER;
+    };
 
     // Public
     this.id = id;
@@ -120,7 +115,7 @@ function Game(id) {
      */
     this.resetGrid = function () {
         init();
-    }
+    };
 
     /**
      * Add a new player to the game
@@ -133,7 +128,7 @@ function Game(id) {
         var playerNumber = players.length;
         if (playerNumber < Constants.MAX_PLAYER) {
             var playerId = "";
-            if (playerNumber == 0) {
+            if (playerNumber === 0) {
                 playerId = Constants.State.X;
             }
             else {
@@ -146,7 +141,7 @@ function Game(id) {
     };
 
     this.move = function(row, column, state) {
-        if (grid[row][column] == Constants.State.BLANK) {
+        if (grid[row][column] === Constants.State.BLANK) {
             grid[row][column] = state;
         }
         moveCount++;
@@ -163,7 +158,7 @@ function Game(id) {
             gameOver: gameOver,
             playerTurn: stateToPlay(),
             winner: winnerState
-        }
+        };
     };
 
     init();
@@ -210,4 +205,4 @@ exports.move = function(gameId, data, callback) {
     else {
         callback("No game defined for id " + gameId, null);
     }
-}
+};

@@ -1,0 +1,51 @@
+@case-size: 50px;
+@border-size: 3px;
+
+.header {
+  margin-top: 20px;
+}
+
+.title {
+  text-align: center;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid lightgray;
+}
+
+#game-status {
+  text-align: center;
+}
+
+#game-grid {
+  max-width: 180px;
+  margin: auto;
+}
+
+.case {
+  text-align: center;
+  width: @case-size;
+  height: @case-size;
+  font-size: 200%;
+  line-height: @case-size;
+  margin: auto;
+
+  &.selectable {
+    cursor: pointer;
+    border: @border-size dashed gray;
+    line-height: @case-size - (@border-size * 2);
+
+    &:hover {
+      color: red;
+      border-color: red;
+    }
+
+    &.selected {
+      color: green;
+      border-color: green;
+    }
+  }
+}
+
+#validation {
+  text-align: center;
+}
