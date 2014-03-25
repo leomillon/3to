@@ -8,7 +8,6 @@ function joinGame(req, res, gameId) {
     res.render('game', {
         title: '3to',
         description: 'TicTacToe Online',
-        socketUrl: "http://192.168.1.4:3000",
         gameId: gameId
     });
 }

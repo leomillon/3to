@@ -7,7 +7,6 @@ var State = {
 var Selectors = {
     gameStatus: '#game-status',
     gameData: '#game-data',
-    socketUrl: '#socket-url',
     gameId: '#game-id',
     cell: '#grid_',
     row: 'data-row',
@@ -106,9 +105,8 @@ updateStatus(Messages.WAITING_OPP);
 
 $(function() {
     var gameDataElt = $(Selectors.gameData),
-        socketUrl = gameDataElt.find(Selectors.socketUrl).val(),
         gameId = gameDataElt.find(Selectors.gameId).val(),
-        socket = io.connect(socketUrl);
+        socket = io.connect();
 
     socket.on('connect', function() {
         console.log('connected!');

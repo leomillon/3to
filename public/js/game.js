@@ -113,7 +113,7 @@ $(function() {
     var gameDataElt = $(Selectors.gameData),
         socketUrl = gameDataElt.find(Selectors.socketUrl).val(),
         gameId = gameDataElt.find(Selectors.gameId).val(),
-        socket = io.connect(socketUrl);
+        socket = io.connect();//socketUrl);
 
     socket.on('connect', function() {
         console.log('connected!');
