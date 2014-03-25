@@ -10,16 +10,15 @@ var State = {
 };
 
 var Selectors = {
+    body: 'body',
     gameStatus: '#game-status',
     gameData: '#game-data',
-    socketUrl: '#socket-url',
     gameId: '#game-id',
     cell: '#grid_',
     row: 'data-row',
     column: 'data-column',
     selectedClassName: 'selected',
-    selectableClassName: 'selectable',
-    validateBtn: '#validate-move-btn'
+    selectableClassName: 'selectable'
 };
 
 var Messages = {
@@ -31,8 +30,7 @@ var Messages = {
 };
 
 var playerState = State.BLANK,
-    selectedRow = null,
-    selectedColumn = null;
+    socket = null;
 
 function updateStatus(message) {
     $(Selectors.gameStatus).text(message);
@@ -47,6 +45,26 @@ function displayableState(state) {
         return state;
     }
     return '';
+}
+
+function displayError(message) {
+    console.err(message);
+}
+
+function unselect() {
+    $('.' + Selectors.selectedClassName).removeClass(Selectors.selectedClassName);
+}
+
+function sendChoice(selectedRow, selectedColumn) {
+    if (selectedRow != null && selectedColumn != null) {
+        console.log('Emitting "player moved" event');
+        socket.emit('player moved', {
+            selectedRow: selectedRow,
+            selectedColumn: selectedColumn,
+            playerState: playerState
+        });
+        unselect();
+    }
 }
 
 function updateGame(gameData) {
@@ -85,35 +103,15 @@ function updateGame(gameData) {
             cellElt.text(displayableState(cellValue));
         }
     }
-
-    $('.' + Selectors.selectableClassName).on('click', function() {
-        $('.' + Selectors.selectedClassName).text(displayableState(State.BLANK));
-        $('.' + Selectors.selectableClassName).removeClass(Selectors.selectedClassName);
-        $(this).toggleClass(Selectors.selectedClassName).text(displayableState(playerState));
-        selectedRow = $(this).attr(Selectors.row);
-        selectedColumn = $(this).attr(Selectors.column);
-        $(Selectors.validateBtn).removeAttr('disabled');
-    });
-}
-
-function displayError(message) {
-    console.err(message);
-}
-
-function unselect() {
-    $('.' + Selectors.selectedClassName).removeClass(Selectors.selectedClassName);
-    selectedRow = null;
-    selectedColumn = null;
-    $(Selectors.validateBtn).attr('disabled', 'disabled');
 }
 
 updateStatus(Messages.WAITING_OPP);
 
 $(function() {
     var gameDataElt = $(Selectors.gameData),
-        socketUrl = gameDataElt.find(Selectors.socketUrl).val(),
-        gameId = gameDataElt.find(Selectors.gameId).val(),
-        socket = io.connect();//socketUrl);
+        gameId = gameDataElt.find(Selectors.gameId).val();
+
+    socket = io.connect();
 
     socket.on('connect', function() {
         console.log('connected!');
@@ -143,14 +141,13 @@ $(function() {
         console.error('Error: ', err);
     });
 
-    $(Selectors.validateBtn).click(function() {
-        if (selectedRow != null && selectedColumn != null) {
-            socket.emit('player moved', {
-                selectedRow: selectedRow,
-                selectedColumn: selectedColumn,
-                playerState: playerState
-            });
-            unselect();
-        }
+    $(Selectors.body).on('click', '.' + Selectors.selectableClassName, function() {
+        console.log('On click event');
+        $('.' + Selectors.selectedClassName).text(displayableState(State.BLANK));
+        $('.' + Selectors.selectableClassName).removeClass(Selectors.selectedClassName);
+        $(this).toggleClass(Selectors.selectedClassName).text(displayableState(playerState));
+        var selectedRow = $(this).attr(Selectors.row);
+        var selectedColumn = $(this).attr(Selectors.column);
+        sendChoice(selectedRow, selectedColumn);
     });
 });
