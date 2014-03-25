@@ -1,7 +1,7 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-25
+ * 2014-03-26
  */
 var State = {
     X: 'X',
@@ -142,7 +142,6 @@ $(function() {
     });
 
     $(Selectors.body).on('click', '.' + Selectors.selectableClassName, function() {
-        console.log('On click event');
         $('.' + Selectors.selectedClassName).text(displayableState(State.BLANK));
         $('.' + Selectors.selectableClassName).removeClass(Selectors.selectedClassName);
         $(this).toggleClass(Selectors.selectedClassName).text(displayableState(playerState));

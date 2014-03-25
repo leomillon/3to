@@ -36,21 +36,21 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index)
     .post('/', routes.indexActions)
     .get('/game/:gameId/join', routes.joinGame)
-    .get('/game/:gameId/create', routes.createGame)
+    .get('/game/create', routes.createGame)
     .use(function(req, res) {
         var errorCode = 404;
         res.status(errorCode);
-        res.render('error', {
-            errorCode: errorCode,
+        routes.renderError(req, res, {
+            errorTitle: errorCode,
             errorMessage: 'Page not found'
         });
     })
     .use(function(error, req, res, next) {
-        var errorCode = 500;
+        var errorCode = error.status || 500;
         res.status(errorCode);
-        res.render('error', {
-            errorCode: errorCode,
-            errorMessage: 'Page not found'
+        routes.renderError(req, res, {
+            errorTitle: errorCode,
+            errorMessage: error
         });
     });
 
@@ -74,6 +74,7 @@ io.sockets.on('connection', function(socket) {
             }
             else {
                 console.error(err);
+                socket.emit('error', err);
             }
         });
     });
