@@ -1,7 +1,7 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-23
+ * 2014-03-25
  */
 var State = {
     X: 'X',

@@ -10,12 +10,15 @@ var game = require('./game');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var path = require('path');
+var swig = require('swig');
 
 
 // all environments
+app.engine('html', swig.renderFile);
+
 app.set('port', process.env.PORT || 3000);
+app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -26,7 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
+    app.set('view cache', false);
 }
 
 app.get('/', routes.index)

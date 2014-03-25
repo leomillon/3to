@@ -12,5 +12,5 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-23
+ * 2014-03-25
  */
