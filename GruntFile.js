@@ -14,15 +14,16 @@ module.exports = function(grunt) {
             }
         },
         uglify: {
-            build: {
-                src: 'resources/js/scripts.js',
-                dest: 'resources/js/<%= projectNameVersion %>.min.js'
+            main: {
+                files: {
+                    'temp/js/game-<%= pkg.version %>.min.js': ['temp/js/game-<%= pkg.version %>.js']
+                }
             }
         },
         less: {
             dev: {
                 files: {
-                    'resources/css/<%= projectNameVersion %>.css': 'resources/less/styles.less'
+                    'temp/css/styles-<%= pkg.version %>.css': 'resources/less/styles.less'
                 }
             },
             prod: {
@@ -31,7 +32,7 @@ module.exports = function(grunt) {
                     compress: true
                 },
                 files: {
-                    'resources/css/<%= projectNameVersion %>.min.css': 'resources/less/styles.less'
+                    'temp/css/styles-<%= pkg.version %>.min.css': 'resources/less/styles.less'
                 }
             }
         },
@@ -41,46 +42,45 @@ module.exports = function(grunt) {
                 banner: '<%= defaultBanner %>',
                 linebreak: true
             },
-            preGeneration: {
+            main: {
                 files: {
-                    src: ['resources/css/*.css', 'resources/js/3to*.js']
-                }
-            },
-            postGeneration: {
-                files: {
-                    src: ['public/js/game.js']
+                    src: ['temp/css/*.css', 'temp/js/*.js']
                 }
             }
         },
         clean: {
-            build: ['public', 'resources/css/*', 'resources/js/3to*.min.js']
+            all: ['temp', 'public'],
+            temp: ['temp'],
+            dist: ['public']
         },
         concat: {
-            dev: {
+            project: {
                 files: {
-                    'public/css/styles.css': [
-                        'resources/lib/css/bootstrap.min.css',
-                        'resources/lib/css/bootstrap-theme.min.css',
-                        'resources/css/<%= projectNameVersion %>.css'
-                    ],
-                    'public/js/scripts.js': [
-                        'resources/lib/js/jquery-1.11.0.min.js',
-                        'resources/lib/js/bootstrap.min.js',
-                        'resources/js/<%= projectNameVersion %>.min.js'
+                    'temp/js/game-<%= pkg.version %>.js': [
+                        'resources/js/common.js',
+                        'resources/js/game.js'
                     ]
                 }
             },
-            prod: {
+            global: {
                 files: {
-                    'public/css/styles.css': [
+                    'public/css/<%= projectNameVersion %>.css': [
                         'resources/lib/css/bootstrap.min.css',
                         'resources/lib/css/bootstrap-theme.min.css',
-                        'resources/css/<%= projectNameVersion %>.min.css'
+                        'temp/css/styles-<%= pkg.version %>.css'
                     ],
-                    'public/js/scripts.js': [
+                    'public/css/<%= projectNameVersion %>.min.css': [
+                        'resources/lib/css/bootstrap.min.css',
+                        'resources/lib/css/bootstrap-theme.min.css',
+                        'temp/css/styles-<%= pkg.version %>.min.css'
+                    ],
+                    'public/js/<%= projectNameVersion %>.js': [
                         'resources/lib/js/jquery-1.11.0.min.js',
-                        'resources/lib/js/bootstrap.min.js',
-                        'resources/js/<%= projectNameVersion %>.min.js'
+                        'resources/lib/js/bootstrap.min.js'
+                    ],
+                    'public/js/<%= projectNameVersion %>.min.js': [
+                        'resources/lib/js/jquery-1.11.0.min.js',
+                        'resources/lib/js/bootstrap.min.js'
                     ]
                 }
             }
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    { expand: true, cwd: 'resources/js/', src: ['game.js'], dest: 'public/js/' },
+                    { expand: true, cwd: 'temp/js/', src: ['**'], dest: 'public/js/' },
                     { expand: true, cwd: 'resources/images/', src: ['**'], dest: 'public/images/' },
                     { expand: true, cwd: 'resources/lib/fonts/', src: ['**'], dest: 'public/fonts/' }
                 ]
@@ -104,26 +104,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-banner');
 
-    // Default task(s).
-    grunt.registerTask('dev', [
-        'jshint',
-        'clean',
-        'uglify',
-        'less:dev',
-        'usebanner:preGeneration',
-        'concat:dev',
-        'copy',
-        'usebanner:postGeneration'
-    ]);
     grunt.registerTask('default', [
-        'jshint',
-        'clean',
-        'uglify',
+        'jshint:all',
+        'clean:all',
+        'less:dev',
         'less:prod',
-        'usebanner:preGeneration',
-        'concat:prod',
+        'concat:project',
+        'uglify',
+        'usebanner:main',
+        'concat:global',
         'copy',
-        'usebanner:postGeneration'
+        'clean:temp'
     ]);
 
 };

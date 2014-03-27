@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 
+var pjson = require('./package.json');
 var express = require('express');
 var app = express();
 var routes = require('./routes');
@@ -12,6 +13,11 @@ var io = require('socket.io').listen(server);
 var path = require('path');
 var swig = require('swig');
 
+swig.setDefaults({
+    locals: {
+        pkg: pjson
+    }
+});
 
 // all environments
 app.engine('html', swig.renderFile);

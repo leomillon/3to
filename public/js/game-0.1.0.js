@@ -1,13 +1,23 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-26
+ * 2014-03-28
  */
-var State = {
-    X: 'X',
-    O: 'O',
-    BLANK: null
-};
+(function(exports){
+
+    exports.constants = {
+        State: {
+            X: 'X',
+            O: 'O',
+            BLANK: null
+        },
+        MIN_PLAYER: 2,
+        MAX_PLAYER: 2,
+        MAX_GRID_SIZE: 3
+    };
+
+})(typeof exports === 'undefined' ? this['common']={}: exports);
+var Constants = common.constants;
 
 var Selectors = {
     body: 'body',
@@ -29,7 +39,7 @@ var Messages = {
     YOU_LOSE: 'You lose!!!'
 };
 
-var playerState = State.BLANK,
+var playerState = Constants.State.BLANK,
     socket = null;
 
 function updateStatus(message) {
@@ -41,7 +51,7 @@ function canPlayerPlay(gameData) {
 }
 
 function displayableState(state) {
-    if (state === State.X || state === State.O) {
+    if (state === Constants.State.X || state === Constants.State.O) {
         return state;
     }
     return '';
@@ -94,7 +104,7 @@ function updateGame(gameData) {
                 cellElt = $(Selectors.cell + row + '_' + column);
 
             cellElt.removeClass(Selectors.selectedClassName);
-            if (cellValue === State.BLANK && canPlayerPlay(gameData)) {
+            if (cellValue === Constants.State.BLANK && canPlayerPlay(gameData)) {
                 cellElt.addClass(Selectors.selectableClassName);
             }
             else {
@@ -117,7 +127,7 @@ $(function() {
         console.log('connected!');
         socket.emit('join game', { gameId: gameId });
     });
-    
+
     socket.on('game joined', function(err, playerId, gameData) {
         if (err == null) {
             playerState = playerId;
@@ -127,7 +137,7 @@ $(function() {
             displayError(err);
         }
     });
-    
+
     socket.on('game updated', function(err, gameData) {
         if (err == null) {
             updateGame(gameData);
@@ -142,7 +152,7 @@ $(function() {
     });
 
     $(Selectors.body).on('click', '.' + Selectors.selectableClassName, function() {
-        $('.' + Selectors.selectedClassName).text(displayableState(State.BLANK));
+        $('.' + Selectors.selectedClassName).text(displayableState(Constants.State.BLANK));
         $('.' + Selectors.selectableClassName).removeClass(Selectors.selectedClassName);
         $(this).toggleClass(Selectors.selectedClassName).text(displayableState(playerState));
         var selectedRow = $(this).attr(Selectors.row);

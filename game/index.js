@@ -1,19 +1,9 @@
 var shortIdGenerator = require('shortid');
+var Constants = require('../resources/js/common').constants;
 
 function isUndefined(variable) {
     return typeof variable === 'undefined';
 }
-
-var Constants = {
-    State: {
-        X: 'X',
-        O: 'O',
-        BLANK: null
-    },
-    MIN_PLAYER: 2,
-    MAX_PLAYER: 2,
-    MAX_GRID_SIZE: 3
-};
 
 var games = [];
 
@@ -49,7 +39,6 @@ function Game(id) {
     };
 
     var checkWinner = function (row, column, state) {
-        lastPlayerState = state;
         // Check columns
         for (var i = 0; i < gridSize; i++) {
             if (checkLine(row, i, i, gridSize, state)) {
@@ -83,7 +72,6 @@ function Game(id) {
         // Check draw
         if (moveCount === (Math.pow(gridSize,2) - 1)) {
             endGame(Constants.State.BLANK);
-            return;
         }
     };
 
@@ -113,13 +101,6 @@ function Game(id) {
     this.id = id;
 
     /**
-     * Reset the grid
-     */
-    this.resetGrid = function () {
-        init();
-    };
-
-    /**
      * Add a new player to the game
      *
      * @returns {string} the player id ('x' or 'o')
@@ -143,6 +124,7 @@ function Game(id) {
     };
 
     this.move = function(row, column, state) {
+        lastPlayerState = state;
         if (grid[row][column] === Constants.State.BLANK) {
             grid[row][column] = state;
         }
@@ -188,6 +170,7 @@ exports.doesGameExist = function(gameId, callback) {
  * Add a new player to the game (creating a new game if needed)
  *
  * @param gameId
+ * @param callback
  * @returns string player id ('x' or 'o')
  *
  * @throws Error if there is already 2 players

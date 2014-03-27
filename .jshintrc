@@ -11,6 +11,7 @@
     "eqnull": true,
     "node": true,
     "globals": {
+        "common": false,
         "io": false,
         "$": false,
         "jQuery": false
