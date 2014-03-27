@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{{ title }}{% endblock %}</title>
 
-        <link rel="stylesheet" href="/css/{{ pkg.name }}-{{ pkg.version }}.css">
+        <link rel="stylesheet" href="/css/{{ pkg.name }}-{{ pkg.version }}.min.css">
 
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -18,7 +18,7 @@
         {% block content %}{% endblock %}
 
         {% block scripts %}
-            <script src="/js/{{ pkg.name }}-{{ pkg.version }}.js"></script>
+            <script src="/js/{{ pkg.name }}-{{ pkg.version }}.min.js"></script>
         {% endblock %}
     </body>
 </html>
