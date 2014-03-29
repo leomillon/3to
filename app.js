@@ -59,7 +59,7 @@ app.get('/', routes.index)
         res.status(errorCode);
         routes.renderError(req, res, {
             errorTitle: errorCode,
-            errorMessage: error
+            errorMessage: error.message
         });
     });
 
