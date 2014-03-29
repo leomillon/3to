@@ -6,6 +6,7 @@
 var pjson = require('./package.json');
 var express = require('express');
 var app = express();
+var debug = require('debug')('3to:app');
 var routes = require('./routes');
 var game = require('./game');
 var server = require('http').createServer(app);
@@ -71,6 +72,8 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('join game', function(data) {
         var gameId = data.gameId;
+
+        debug('Player want to join game \'%s\'', data.gameId);
 
         game.joinGame(gameId, function(err, playerId, gameData) {
             if (err == null) {
