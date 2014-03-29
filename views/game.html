@@ -3,7 +3,7 @@
 {% block scripts %}
     {% parent %}
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/game-{{ pkg.version }}.min.js"></script>
+    <script src="/js/game-{{ resources.suffix }}.js"></script>
 {% endblock %}
 
 {% block content %}

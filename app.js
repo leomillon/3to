@@ -15,7 +15,10 @@ var swig = require('swig');
 
 swig.setDefaults({
     locals: {
-        pkg: pjson
+        pkg: pjson,
+        resources: {
+            suffix: pjson.version + ".min"
+        }
     }
 });
 
