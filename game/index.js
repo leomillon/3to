@@ -1,9 +1,7 @@
 var shortIdGenerator = require('shortid');
-var Constants = require('../resources/js/common').constants;
-
-function isUndefined(variable) {
-    return typeof variable === 'undefined';
-}
+var CommonModule = require('../resources/js/common');
+var Constants = CommonModule.constants;
+var utils = CommonModule.utils;
 
 var games = [];
 
@@ -153,7 +151,7 @@ function getGame(gameId) {
 }
 
 function doesGameExist(gameId) {
-    return !isUndefined(getGame(gameId));
+    return utils.isDefined(getGame(gameId));
 }
 
 function createGame(gameId) {
@@ -178,7 +176,7 @@ exports.doesGameExist = function(gameId, callback) {
  */
 exports.joinGame = function(gameId, callback) {
     var game = getGame(gameId);
-    if (isUndefined(game)) {
+    if (utils.isUndefined(game)) {
         callback('Game does not exist');
     }
     try {
@@ -198,9 +196,9 @@ exports.createGame = function(callback) {
         gameId = shortIdGenerator.generate();
         game = getGame(gameId);
         i ++;
-    } while (isUndefined(game) && i <= MAX_TRY);
+    } while (utils.isUndefined(game) && i <= MAX_TRY);
     game = createGame(gameId);
-    if (isUndefined(game)) {
+    if (utils.isUndefined(game)) {
         console.error('Unable to create a new unique game');
         callback('An error occured, please try later.');
     }
@@ -211,7 +209,7 @@ exports.createGame = function(callback) {
 
 exports.move = function(gameId, data, callback) {
     var game = getGame(gameId);
-    if (!isUndefined(game)) {
+    if (utils.isDefined(game)) {
         game.move(data.selectedRow, data.selectedColumn, data.playerState);
         callback(null, game.extractGameData());
     }

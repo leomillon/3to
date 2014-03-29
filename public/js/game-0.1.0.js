@@ -1,10 +1,11 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-28
+ * 2014-03-29
  */
 (function(exports){
 
+    // Constants
     exports.constants = {
         State: {
             X: 'X',
@@ -15,6 +16,19 @@
         MAX_PLAYER: 2,
         MAX_GRID_SIZE: 3
     };
+
+    // Methods
+    function Utils() {
+        this.isUndefined = function(variable) {
+            return typeof variable === 'undefined';
+        };
+
+        this.isDefined = function(variable) {
+            return !this.isUndefined(variable);
+        };
+    }
+
+    exports.utils = new Utils();
 
 })(typeof exports === 'undefined' ? this['common']={}: exports);
 var Constants = common.constants;
