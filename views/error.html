@@ -1,10 +1,7 @@
-{% extends 'layout.html' %}
+{% extends 'simple_layout.html' %}
 
-{% block content %}
-    <div class="container">
-        <div class="jumbotron">
-            <h1>{{ errorTitle }}</h1>
-            <p class="lead">{{ errorMessage }}</p>
-        </div>
-    </div>
+{% block header.title %}{{ errorTitle }}{% endblock %}
+
+{% block header.description %}
+{ errorMessage }}
 {% endblock %}

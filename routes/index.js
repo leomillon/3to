@@ -16,11 +16,7 @@ function renderSimpleError(req, res, errorTitle, errorMessage) {
 function joinGame(req, res, gameId) {
     game.doesGameExist(gameId, function(gameId, result) {
         if (result) {
-            res.render('game', {
-                title: '3to',
-                description: 'TicTacToe Online',
-                gameId: gameId
-            });
+            res.render('game', { gameId: gameId });
         }
         else {
             renderSimpleError(req, res, "Unable to join game", "The game with ID '" + gameId + "' does not exist");
@@ -45,10 +41,7 @@ function createGame(req, res) {
  * GET home page.
  */
 exports.index = function(req, res) {
-  res.render('index', {
-      title: '3to',
-      description: 'TicTacToe Online'
-  });
+  res.render('index');
 };
 
 exports.indexActions = function(req, res) {
