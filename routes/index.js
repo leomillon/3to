@@ -1,9 +1,6 @@
-var path = require('path'),
-    game = require('../game');
-
-function isDefined(variable) {
-    return typeof variable !== 'undefined';
-}
+var path = require('path');
+var game = require('../game');
+var utils = require('../resources/js/common').utils;
 
 function renderError(req, res, data) {
     res.render('error', data);
@@ -57,10 +54,10 @@ exports.index = function(req, res) {
 exports.indexActions = function(req, res) {
     var body = req.body;
 
-    if (isDefined(body.join_game)) {
+    if (utils.isDefined(body.join_game)) {
         res.redirect(path.join('/', 'game', body.gameId, 'join'));
     }
-    else if (isDefined(body.create_game)) {
+    else if (utils.isDefined(body.create_game)) {
         res.redirect(path.join('/', 'game', 'create'));
     }
 };
