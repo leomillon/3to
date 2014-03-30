@@ -1,6 +1,8 @@
 var path = require('path');
 var game = require('../game');
 var utils = require('../../common').utils;
+var debug = require('debug')('3to:routes');
+var shortIdGenerator = require('shortid');
 
 function renderError(req, res, data) {
     res.render('error', data);
@@ -37,6 +39,14 @@ function createGame(req, res) {
         }
     });
 }
+
+exports.registerUserInfo = function(req, res, next) {
+    if (utils.isUndefined(req.session.userId)) {
+        req.session.userId = shortIdGenerator.generate();
+        debug('New user id defined :', req.session.userId);
+    }
+    next();
+};
 
 /*
  * GET home page.

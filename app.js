@@ -30,6 +30,8 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'helloguys!' }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,7 +41,8 @@ if ('development' == app.get('env')) {
     app.set('view cache', false);
 }
 
-app.get('/', routes.index)
+app.get('*', routes.registerUserInfo)
+    .get('/', routes.index)
     .post('/game/join', routes.joinGame)
     .get('/game/:gameId/join', routes.joinGame)
     .post('/game/create', routes.gameCreate)
