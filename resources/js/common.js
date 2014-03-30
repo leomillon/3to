@@ -14,13 +14,39 @@
 
     // Methods
     function Utils() {
-        this.isUndefined = function(variable) {
+        var cst = {
+            Method: {
+                GET: 'GET',
+                POST: 'POST'
+            }
+        };
+        // Private
+        var isUndefined = function(variable) {
             return typeof variable === 'undefined';
         };
 
-        this.isDefined = function(variable) {
-            return !this.isUndefined(variable);
+        var isDefined = function(variable) {
+            return !isUndefined(variable);
         };
+
+        var isMethod = function(actual, expected) {
+            return isDefined(actual) && actual.toUpperCase() === expected.toUpperCase();
+        };
+
+        var isPostMethod = function(method) {
+            return isMethod(method, cst.Method.POST);
+        };
+
+        var isGetMethod = function(method) {
+            return isMethod(method, cst.Method.GET);
+        };
+
+        // Public
+        this.isUndefined = isUndefined;
+        this.isDefined = isDefined;
+
+        this.isPost = isPostMethod;
+        this.isGet = isGetMethod;
     }
 
     exports.utils = new Utils();

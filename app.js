@@ -44,9 +44,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index)
-    .post('/', routes.indexActions)
+    .post('/game/join', routes.joinGame)
     .get('/game/:gameId/join', routes.joinGame)
-    .get('/game/:gameId/created', routes.gameCreated)
+    .post('/game/create', routes.gameCreate)
     .use(function(req, res) {
         var errorCode = 404;
         res.status(errorCode);

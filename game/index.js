@@ -187,7 +187,7 @@ exports.joinGame = function(gameId, callback) {
     }
 };
 
-exports.gameCreated = function(callback) {
+exports.gameCreate = function(callback) {
     var game;
     var MAX_TRY = 10;
     var gameId;
