@@ -2,13 +2,31 @@ module.exports = function(grunt) {
 
     // Project configuration
     grunt.initConfig({
+        // Variables
         pkg: grunt.file.readJSON('package.json'),
-        projectName: '<%= pkg.name %>',
-        projectNameVersion: '<%= pkg.name %>-<%= pkg.version %>',
+        project: {
+            nameVersion: '<%= pkg.name %>-<%= pkg.version %>'
+        },
+        folder: {
+            temp: 'temp',
+            dist: 'public'
+        },
+        resources: {
+            common: 'resources/common',
+            server: 'resources/server',
+            client: 'resources/client'
+        },
         defaultBanner: '/*!\n * <%= pkg.name %> v<%= pkg.version %>\n * <%= pkg.author %>\n * <%= grunt.template.today("yyyy-mm-dd") %>\n */',
+        // Tasks configuration
         jshint: {
             // define the files to lint
-            all: ['Gruntfile.js', 'game/*.js', 'routes/*.js', 'resources/js/*.js'],
+            all: [
+                'Gruntfile.js',
+                '<%= resources.server %>/game/*.js',
+                '<%= resources.server %>/routes/*.js',
+                '<%= resources.common %>/*.js',
+                '<%= resources.client %>/js/*.js'
+            ],
             options: {
                 jshintrc: '.jshintrc'
             }
@@ -16,14 +34,16 @@ module.exports = function(grunt) {
         uglify: {
             main: {
                 files: {
-                    'temp/js/game-<%= pkg.version %>.min.js': ['temp/js/game-<%= pkg.version %>.js']
+                    '<%= folder.temp %>/js/game-<%= pkg.version %>.min.js': [
+                        '<%= folder.temp %>/js/game-<%= pkg.version %>.js'
+                    ]
                 }
             }
         },
         less: {
             dev: {
                 files: {
-                    'temp/css/styles-<%= pkg.version %>.css': 'resources/less/styles.less'
+                    '<%= folder.temp %>/css/styles-<%= pkg.version %>.css': '<%= resources.client %>/less/styles.less'
                 }
             },
             prod: {
@@ -32,7 +52,7 @@ module.exports = function(grunt) {
                     compress: true
                 },
                 files: {
-                    'temp/css/styles-<%= pkg.version %>.min.css': 'resources/less/styles.less'
+                    '<%= folder.temp %>/css/styles-<%= pkg.version %>.min.css': '<%= resources.client %>/less/styles.less'
                 }
             }
         },
@@ -44,43 +64,43 @@ module.exports = function(grunt) {
             },
             main: {
                 files: {
-                    src: ['temp/css/*.css', 'temp/js/*.js']
+                    src: ['<%= folder.temp %>/css/*.css', '<%= folder.temp %>/js/*.js']
                 }
             }
         },
         clean: {
-            all: ['temp', 'public'],
-            temp: ['temp'],
-            dist: ['public']
+            all: ['<%= folder.temp %>', '<%= folder.dist %>'],
+            temp: ['<%= folder.temp %>'],
+            dist: ['<%= folder.dist %>']
         },
         concat: {
             project: {
                 files: {
-                    'temp/js/game-<%= pkg.version %>.js': [
-                        'resources/js/common.js',
-                        'resources/js/game.js'
+                    '<%= folder.temp %>/js/game-<%= pkg.version %>.js': [
+                        '<%= resources.common %>/index.js',
+                        '<%= resources.client %>/js/game.js'
                     ]
                 }
             },
             global: {
                 files: {
-                    'public/css/<%= projectNameVersion %>.css': [
-                        'resources/lib/css/bootstrap.min.css',
-                        'resources/lib/css/bootstrap-theme.min.css',
-                        'temp/css/styles-<%= pkg.version %>.css'
+                    '<%= folder.dist %>/css/<%= project.nameVersion %>.css': [
+                        '<%= resources.client %>/lib/css/bootstrap.min.css',
+                        '<%= resources.client %>/lib/css/bootstrap-theme.min.css',
+                        '<%= folder.temp %>/css/styles-<%= pkg.version %>.css'
                     ],
-                    'public/css/<%= projectNameVersion %>.min.css': [
-                        'resources/lib/css/bootstrap.min.css',
-                        'resources/lib/css/bootstrap-theme.min.css',
-                        'temp/css/styles-<%= pkg.version %>.min.css'
+                    '<%= folder.dist %>/css/<%= project.nameVersion %>.min.css': [
+                        '<%= resources.client %>/lib/css/bootstrap.min.css',
+                        '<%= resources.client %>/lib/css/bootstrap-theme.min.css',
+                        '<%= folder.temp %>/css/styles-<%= pkg.version %>.min.css'
                     ],
-                    'public/js/<%= projectNameVersion %>.js': [
-                        'resources/lib/js/jquery-1.11.0.min.js',
-                        'resources/lib/js/bootstrap.min.js'
+                    '<%= folder.dist %>/js/<%= project.nameVersion %>.js': [
+                        '<%= resources.client %>/lib/js/jquery-1.11.0.min.js',
+                        '<%= resources.client %>/lib/js/bootstrap.min.js'
                     ],
-                    'public/js/<%= projectNameVersion %>.min.js': [
-                        'resources/lib/js/jquery-1.11.0.min.js',
-                        'resources/lib/js/bootstrap.min.js'
+                    '<%= folder.dist %>/js/<%= project.nameVersion %>.min.js': [
+                        '<%= resources.client %>/lib/js/jquery-1.11.0.min.js',
+                        '<%= resources.client %>/lib/js/bootstrap.min.js'
                     ]
                 }
             }
@@ -88,9 +108,9 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    { expand: true, cwd: 'temp/js/', src: ['**'], dest: 'public/js/' },
-                    { expand: true, cwd: 'resources/images/', src: ['**'], dest: 'public/images/' },
-                    { expand: true, cwd: 'resources/lib/fonts/', src: ['**'], dest: 'public/fonts/' }
+                    { expand: true, cwd: '<%= folder.temp %>/js/', src: ['**'], dest: '<%= folder.dist %>/js/' },
+                    { expand: true, cwd: '<%= resources.client %>/images/', src: ['**'], dest: '<%= folder.dist %>/images/' },
+                    { expand: true, cwd: '<%= resources.client %>/lib/fonts/', src: ['**'], dest: '<%= folder.dist %>/fonts/' }
                 ]
             }
         }

@@ -1,6 +1,6 @@
 var path = require('path');
 var game = require('../game');
-var utils = require('../resources/js/common').utils;
+var utils = require('../../common').utils;
 
 function renderError(req, res, data) {
     res.render('error', data);

@@ -1,5 +1,5 @@
 var shortIdGenerator = require('shortid');
-var CommonModule = require('../resources/js/common');
+var CommonModule = require('../../common');
 var Constants = CommonModule.constants;
 var utils = CommonModule.utils;
 

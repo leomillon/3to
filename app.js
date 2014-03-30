@@ -1,14 +1,9 @@
-
-/**
- * Module dependencies.
- */
-
 var pjson = require('./package.json');
 var express = require('express');
 var app = express();
 var debug = require('debug')('3to:app');
-var routes = require('./routes');
-var game = require('./game');
+var routes = require('./resources/server/routes');
+var game = require('./resources/server/game');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var path = require('path');
@@ -28,7 +23,7 @@ app.engine('html', swig.renderFile);
 
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'resources/server/views'));
 app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
