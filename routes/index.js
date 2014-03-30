@@ -25,11 +25,9 @@ function joinGame(req, res, gameId) {
 }
 
 function createGame(req, res) {
-    game.createGame(function(err, gameId) {
+    game.gameCreated(function(err, gameId) {
         if (err == null) {
-            res.render('game_created', {
-                gameUrl: path.join('/', 'game', gameId, 'join')
-            });
+            res.redirect(path.join('/', 'game', gameId, 'created'));
         }
         else {
             renderSimpleError(req, res, "Unable to create game", err);
@@ -51,7 +49,7 @@ exports.indexActions = function(req, res) {
         res.redirect(path.join('/', 'game', body.gameId, 'join'));
     }
     else if (utils.isDefined(body.create_game)) {
-        res.redirect(path.join('/', 'game', 'create'));
+        createGame(req, res);
     }
 };
 
@@ -59,8 +57,12 @@ exports.joinGame = function(req, res) {
     joinGame(req, res, req.params.gameId);
 };
 
-exports.createGame = function(req, res) {
-    createGame(req, res);
+exports.gameCreated = function(req, res) {
+    var gameId = req.params.gameId;
+    res.render('game_created', {
+        gameId: gameId,
+        gameUrl: path.join('/', 'game', gameId, 'join')
+    });
 };
 
 exports.renderError = renderError;
