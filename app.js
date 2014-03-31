@@ -9,6 +9,7 @@ var io = require('socket.io').listen(server);
 var path = require('path');
 var swig = require('swig');
 
+// template locals
 swig.setDefaults({
     locals: {
         pkg: pjson,
