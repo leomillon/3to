@@ -76,7 +76,8 @@ var Messages = {
     YOUR_TURN: 'It\'s your turn to play',
     OPP_TURN: 'The opponent is playing...',
     YOU_WIN: 'You win !!!',
-    YOU_LOSE: 'You lose!!!'
+    YOU_LOSE: 'You lose!!!',
+    NO_WINNER: 'Game is over, nobody win.'
 };
 
 var playerState = Constants.State.BLANK,
@@ -123,20 +124,26 @@ function updateGame(gameData) {
         gridSize = gameData.gridSize;
 
     if (gameData.gameReady) {
+        var message;
         if (gameData.gameOver) {
             if (gameData.winner === playerState) {
-                updateStatus(Messages.YOU_WIN);
+                message = Messages.YOU_WIN;
+            }
+            else if (gameData.winner === Constants.State.BLANK) {
+                message = Messages.NO_WINNER;
             }
             else {
-                updateStatus(Messages.YOU_LOSE);
+                message = Messages.YOU_LOSE;
             }
         }
         else if (gameData.playerTurn === playerState) {
-            updateStatus(Messages.YOUR_TURN);
+            message = Messages.YOUR_TURN;
         }
         else {
-            updateStatus(Messages.OPP_TURN);
+            message = Messages.OPP_TURN;
         }
+
+        updateStatus(message);
     }
 
     for (var row = 0; row < gridSize; row++) {
