@@ -56,14 +56,12 @@ exports.index = function(req, res) {
 };
 
 exports.joinGame = function(req, res) {
-    var gameId;
     if (utils.isPost(req.method)) {
-        gameId = req.body.gameId;
+        res.redirect(path.join('/', 'game', req.body.gameId, 'join'));
     }
     else if (utils.isGet(req.method)) {
-        gameId = req.params.gameId;
+        joinGame(req, res, req.params.gameId);
     }
-    joinGame(req, res, gameId);
 };
 
 exports.gameCreate = function(req, res) {
