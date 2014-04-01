@@ -1,7 +1,7 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-03-30
+ * 2014-04-01
  */
 (function(exports){
 
@@ -98,7 +98,8 @@ function displayableState(state) {
 }
 
 function displayError(message) {
-    console.err(message);
+    console.error(message);
+    alert('error : ' + message);
 }
 
 function unselect() {
@@ -188,7 +189,7 @@ $(function() {
     });
 
     socket.on('error', function(err) {
-        console.error('Error: ', err);
+        displayError(err);
     });
 
     $(Selectors.body).on('click', '.' + Selectors.selectableClassName, function() {

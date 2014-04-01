@@ -84,7 +84,6 @@ io.sockets.on('connection', function(socket) {
                 socket.broadcast.to(gameId).emit('game updated', err, gameData);
             }
             else {
-                console.error(err);
                 socket.emit('error', err);
             }
         });
@@ -95,6 +94,12 @@ io.sockets.on('connection', function(socket) {
             game.move(gameId, data, function (err, gameData) {
                 io.sockets.in(gameId).emit('game updated', err, gameData);
             })
+        });
+    });
+
+    socket.on('disconnect', function() {
+        socket.get('gameId', function(err, gameId) {
+            socket.broadcast.to(gameId).emit('error', 'The opponent has left the game...');
         });
     });
 
