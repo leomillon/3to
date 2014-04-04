@@ -1,7 +1,7 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-04-01
+ * 2014-04-04
  */
 (function(exports){
 
