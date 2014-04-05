@@ -2,7 +2,7 @@ var Constants = common.constants;
 
 var Selectors = {
     body: 'body',
-    gameStatus: '#game-status',
+    gameStatus: '.game-status',
     gameData: '#game-data',
     gameId: '#game-id',
     cell: '#grid_',
@@ -22,7 +22,18 @@ var Messages = {
 };
 
 var playerState = Constants.State.BLANK,
+    shouldExit = true,
+    gameRestarted = false,
     socket = null;
+
+var goToHomeCallback = function() {
+    if (shouldExit) {
+        $(location).attr('href', '/');
+    }
+    else {
+        shouldExit = true;
+    }
+};
 
 function updateStatus(message) {
     $(Selectors.gameStatus).text(message);
@@ -40,8 +51,11 @@ function displayableState(state) {
 }
 
 function displayError(message) {
-    console.error(message);
-    alert('error : ' + message);
+    shouldExit = false;
+    $('#restartModal').modal('hide');
+    var $errorModal = $('#errorModal');
+    $errorModal.find('.modal-body').text(message);
+    $errorModal.modal('show');
 }
 
 function unselect() {
@@ -64,8 +78,8 @@ function updateGame(gameData) {
     var grid = gameData.grid,
         gridSize = gameData.gridSize;
 
+    var message =  Messages.WAITING_OPP;
     if (gameData.gameReady) {
-        var message;
         if (gameData.gameOver) {
             if (gameData.winner === playerState) {
                 message = Messages.YOU_WIN;
@@ -83,9 +97,8 @@ function updateGame(gameData) {
         else {
             message = Messages.OPP_TURN;
         }
-
-        updateStatus(message);
     }
+    updateStatus(message);
 
     for (var row = 0; row < gridSize; row++) {
         for (var column = 0; column < gridSize; column++) {
@@ -95,12 +108,17 @@ function updateGame(gameData) {
             cellElt.removeClass(Selectors.selectedClassName);
             if (cellValue === Constants.State.BLANK && canPlayerPlay(gameData)) {
                 cellElt.addClass(Selectors.selectableClassName);
+                cellElt.text(displayableState(playerState));
             }
             else {
                 cellElt.removeClass(Selectors.selectableClassName);
+                cellElt.text(displayableState(cellValue));
             }
-            cellElt.text(displayableState(cellValue));
         }
+    }
+
+    if (gameData.gameOver) {
+        $('#restartModal').modal('show');
     }
 }
 
@@ -117,23 +135,18 @@ $(function() {
         socket.emit('join game', { gameId: gameId });
     });
 
-    socket.on('game joined', function(err, playerId, gameData) {
-        if (err == null) {
-            playerState = playerId;
-            updateGame(gameData);
-        }
-        else {
-            displayError(err);
-        }
+    socket.on('game joined', function(playerId, gameData) {
+        playerState = playerId;
+        updateGame(gameData);
     });
 
-    socket.on('game updated', function(err, gameData) {
-        if (err == null) {
-            updateGame(gameData);
-        }
-        else {
-            displayError(err);
-        }
+    socket.on('game updated', function(gameData) {
+        updateGame(gameData);
+    });
+
+    socket.on('game restarted', function(gameData) {
+        gameRestarted = true;
+        updateGame(gameData);
     });
 
     socket.on('error', function(err) {
@@ -147,5 +160,18 @@ $(function() {
         var selectedRow = $(this).attr(Selectors.row);
         var selectedColumn = $(this).attr(Selectors.column);
         sendChoice(selectedRow, selectedColumn);
+    });
+
+    $('#errorModal').on('hidden.bs.modal', goToHomeCallback);
+    $('#restartModal').on('hidden.bs.modal', goToHomeCallback);
+    $('#restart-btn').on('click', function() {
+        shouldExit = false;
+        $('#restartModal').modal('hide');
+        if (!gameRestarted) {
+            socket.emit('restart game');
+        }
+        else {
+            gameRestarted = false;
+        }
     });
 });

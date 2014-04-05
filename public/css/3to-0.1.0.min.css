@@ -15,6 +15,6 @@
 /*!
  * 3to v0.1.0
  * Léo Millon <millon.leo@gmail.com>
- * 2014-04-04
+ * 2014-04-05
  */
-.header{margin-top:20px}.bordered-bottom{border-bottom:1px solid #d3d3d3}#game-status{text-align:center}#game-grid{max-width:180px;margin:auto}.case{text-align:center;width:50px;height:50px;font-size:200%;line-height:50px;margin:auto}.case.selectable{cursor:pointer;border:3px dashed gray;line-height:44px}.case.selectable:hover{color:red;border-color:red}.case.selectable.selected{color:green;border-color:green}.back-button{height:69px;line-height:69px}
+.header{margin-top:20px}.bordered-bottom{border-bottom:1px solid #d3d3d3}.highlight{padding:9px 14px;margin-top:14px;margin-bottom:14px;background-color:#f7f7f9;border:1px solid #e1e1e8;border-radius:4px}#game-grid{max-width:180px;margin:auto}.case{text-align:center;width:50px;height:50px;font-size:200%;line-height:50px;margin:auto}.case.selectable{cursor:pointer;color:rgba(128,128,128,.6);border:3px dashed rgba(128,128,128,.6);line-height:44px}.case.selectable:hover,.case.selectable.selected{color:green;border-color:green}.back-button{height:56px;line-height:56px}

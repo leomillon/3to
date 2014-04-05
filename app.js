@@ -80,8 +80,8 @@ io.sockets.on('connection', function(socket) {
                 socket.set('playerId', playerId);
                 socket.join(gameId);
 
-                socket.emit('game joined', err, playerId, gameData);
-                socket.broadcast.to(gameId).emit('game updated', err, gameData);
+                socket.emit('game joined', playerId, gameData);
+                socket.broadcast.to(gameId).emit('game updated', gameData);
             }
             else {
                 socket.emit('error', err);
@@ -92,14 +92,35 @@ io.sockets.on('connection', function(socket) {
     socket.on('player moved', function(data) {
         socket.get('gameId', function(err, gameId) {
             game.move(gameId, data, function (err, gameData) {
-                io.sockets.in(gameId).emit('game updated', err, gameData);
+                if (err == null) {
+                    io.sockets.in(gameId).emit('game updated', gameData);
+                }
+                else {
+                    socket.emit('error', err);
+                }
             })
+        });
+    });
+
+    socket.on('restart game', function() {
+        socket.get('gameId', function(err, gameId) {
+            game.restartGame(gameId, function(err, gameData) {
+                if (err == null) {
+                    io.sockets.in(gameId).emit('game restarted', gameData);
+                }
+                else {
+                    socket.emit('error', err);
+                }
+            });
         });
     });
 
     socket.on('disconnect', function() {
         socket.get('gameId', function(err, gameId) {
             socket.broadcast.to(gameId).emit('error', 'The opponent has left the game...');
+            game.closeGame(gameId, function(success) {
+                debug('Game ' + gameId + ' closed with success status = ' +  success);
+            });
         });
     });
 

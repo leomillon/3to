@@ -26,7 +26,7 @@ function Game(id) {
         }
 
         gameOver = false;
-        winnerState = Constants.State.BLANK;
+        winnerState = winnerState || Constants.State.BLANK;
         moveCount = 0;
         lastPlayerState = winnerState;
     };
@@ -143,6 +143,10 @@ function Game(id) {
         };
     };
 
+    this.reset = function() {
+        init();
+    };
+
     init();
 }
 
@@ -158,6 +162,14 @@ function createGame(gameId) {
     var createdGame = new Game(gameId);
     games[createdGame.id] = createdGame;
     return createdGame;
+}
+
+function closeGame(gameId) {
+    if (doesGameExist(gameId)) {
+        delete games[gameId];
+        return true;
+    }
+    return false;
 }
 
 exports.doesGameExist = function(gameId, callback) {
@@ -216,4 +228,19 @@ exports.move = function(gameId, data, callback) {
     else {
         callback("No game defined for id " + gameId, null);
     }
+};
+
+exports.restartGame = function (gameId, callback) {
+    var game = getGame(gameId);
+    if (utils.isUndefined(game)) {
+        callback('Game does not exist');
+    }
+    else {
+        game.reset();
+        callback(null, game.extractGameData());
+    }
+};
+
+exports.closeGame = function (gameId, callback) {
+    callback(closeGame(gameId));
 };

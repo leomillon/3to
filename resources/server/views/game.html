@@ -13,12 +13,12 @@
                 <a href="/"><span class="glyphicon glyphicon-chevron-left"></span> Home</a>
             </div>
             <div class="col-xs-4">
-                <h1 class="text-center">Game <small>{{ gameId }}</small></h1>
+                <h3 class="text-center">Game <small>{{ gameId }}</small></h3>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <p id="game-status"></p>
+                <p class="game-status highlight text-center">Loading...</p>
             </div>
         </div>
         <div class="row">
@@ -67,6 +67,42 @@
             <form>
                 <input id="game-id" type="hidden" value="{{ gameId }}">
             </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="errorModalLabel">Oops...</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit the game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="restartModal" tabindex="-1" role="dialog" aria-labelledby="restartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="restartModalLabel">Game over!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="game-status"></p>
+                    <p>You can restart this game with the same opponent, or go to home page.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit the game</button>
+                    <button id="restart-btn" type="button" class="btn btn-primary">Restart this game</button>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
